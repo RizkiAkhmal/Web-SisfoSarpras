@@ -19,7 +19,8 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Nama Peminjam</th>
+                    <th>Nama Akun</th>
+                    {{-- <th>Nama Peminjam</th> --}}
                     <th>Barang</th>
                     <th>Jumlah</th>
                     <th>Alasan</th>
@@ -34,6 +35,7 @@
                 <tr>
                     <td>{{ $peminjaman->id }}</td>
                     <td>{{ $peminjaman->user->name ?? '-' }}</td>
+                    {{-- <td>{{ $peminjaman->nama_peminjam}} </td> --}}
                     <td>{{ $peminjaman->barang->nama_barang ?? '-' }}</td>
                     <td>{{ $peminjaman->jumlah }}</td>
                     <td>{{ $peminjaman->alasan_pinjam }}</td>
@@ -50,11 +52,11 @@
                                 @csrf
                                 <button class="btn btn-danger btn-sm" onclick="return confirm('Tolak peminjaman ini?')">Reject</button>
                             </form>
-                            <form action="{{ route('kategori.destroy', $kategori->id) }}" method="POST" style="display:inline-block;">
+                            {{-- <form action="{{ route('kategori.destroy', $kategori->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" onclick="return confirm('Yakin hapus?')" class="btn btn-danger btn-sm">Hapus</button>
-                            </form>
+                            </form> --}}
 
                         @else
                             <span class="text-muted">-</span>

@@ -24,8 +24,15 @@
             @foreach($barangs as $index => $barang)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>
+                    {{-- <td>
                         <img src="{{ asset('storage/' . $barang->foto) }}" alt="{{ $barang->nama_barang }}" width="100">
+                    </td> --}}
+                    <td>
+                        @if($barang->foto)
+                                <img src="{{ $barang->foto }}" alt="Foto {{ $barang->nama }}" width="60">
+                        @else
+                            <span class="text-muted">Tidak ada</span>
+                        @endif
                     </td>
                     <td>{{ $barang->nama_barang }}</td>
                     <td>{{ $barang->jumlah_barang }}</td>

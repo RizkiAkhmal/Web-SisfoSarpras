@@ -34,14 +34,15 @@
             </div> --}}
 
             <div class="mb-3">
-                <label for="foto" class="form-label">Foto Barang</label>
-                <input type="file" name="foto" id="foto" class="form-control" accept="image/*">
+                <label for="foto" class="form-label">Link Foto Barang</label>
+                <input type="text" name="foto" id="foto" class="form-control" placeholder="https://..." value="{{ old('foto', $barang->foto) }}">
                 @if ($barang->foto)
-                    <div class="mb-3 text-center">
+                    <div class="mt-2 text-center">
                         <img src="{{ $barang->foto }}" alt="Foto Barang" style="max-width: 200px;" class="img-thumbnail">
                     </div>
                 @endif
             </div>
+            
             
             <div class="mb-3">
                 <label for="nama_barang" class="form-label">Nama Barang</label>

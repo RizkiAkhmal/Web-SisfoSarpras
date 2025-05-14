@@ -13,13 +13,9 @@ return new class extends Migration
     {
         Schema::create('peminjamans', function (Blueprint $table) {
             $table->id();
-        
-            // Definisikan foreign key user dengan benar
             $table->foreignId('id_user')->constrained('users');
-            
-            // Barang juga sudah benar
             $table->foreignId('id_barang')->constrained('barangs');
-            $table->string('nama_peminjam');
+            // $table->string('nama_peminjam');
             $table->string('alasan_pinjam');
             $table->string('jumlah');
             $table->date('tgl_pinjam');

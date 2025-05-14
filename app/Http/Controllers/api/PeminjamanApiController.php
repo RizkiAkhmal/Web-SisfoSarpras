@@ -12,7 +12,7 @@ class PeminjamanApiController extends Controller
         $validated = $request->validate([
             'id_user' => 'required|exists:users,id',
             'id_barang' => 'required|exists:barangs,id',
-            'nama_peminjam' => 'required|string',
+            // 'nama_peminjam' => 'required|string',
             'alasan_pinjam' => 'required|string',
             'jumlah' => 'required|integer',
             'tgl_pinjam' => 'required|date',
@@ -27,7 +27,7 @@ class PeminjamanApiController extends Controller
             'message' => 'Peminjaman berhasil ditambahkan',
             'data' => [
                 'id' => $peminjaman->id,
-                'nama_peminjam' => $peminjaman->nama_peminjam,
+                // 'nama_peminjam' => $peminjaman->nama_peminjam,
                 'alasan_pinjam' => $peminjaman->alasan_pinjam,
                 'jumlah' => $peminjaman->jumlah,
                 'tgl_pinjam' => $peminjaman->tgl_pinjam,
@@ -40,5 +40,21 @@ class PeminjamanApiController extends Controller
             ]
         ], 201);
     }
-    
+
+//     public function getByUser(Request $request){
+//     $user = $request->user(); // Ambil user dari token Sanctum
+
+//     $peminjaman = Peminjaman::with(['barang']) // pastikan relasi barang() sudah dibuat
+//         ->where('id_user', $user->id)
+//         ->orderBy('created_at', 'desc')
+//         ->get();
+
+//     return response()->json([
+//         'message' => 'Data peminjaman user berhasil dimuat',
+//         'data' => $peminjaman,
+//      ]);
+// }
 }
+
+    
+

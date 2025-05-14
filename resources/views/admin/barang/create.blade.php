@@ -32,7 +32,7 @@
                 </div> --}}
                 <div class="mb-3">
                     <label for="foto" class="form-label">Link Foto Barang</label>
-                    <input type="url" name="foto" id="foto" class="form-control" value="{{ old('foto') }}" placeholder="https://example.com/foto.jpg" required>
+                    <input type="text" name="foto" id="foto" class="form-control" placeholder="https://..." value="{{ old('foto') }}">
                 </div>
 
                 <div class="mb-3">

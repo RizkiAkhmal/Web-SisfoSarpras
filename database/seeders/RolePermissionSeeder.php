@@ -33,5 +33,7 @@ class RolePermissionSeeder extends Seeder
             ]
         );
         $user->assignRole($userRole);
+
+        
     }
 }

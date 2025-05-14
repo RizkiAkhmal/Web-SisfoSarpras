@@ -6,6 +6,8 @@ use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\KategoriController;
 use App\Http\Controllers\admin\LaporanController;
 use App\Http\Controllers\admin\PeminjamanController;
+use App\Http\Controllers\Admin\PengembalianController;
+use App\Models\Pengembalian;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,6 +49,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function() {
     Route::post('peminjaman/{id}/approve', [PeminjamanController::class, 'approve'])->name('peminjaman.approve');
     Route::post('peminjaman/{id}/reject', [PeminjamanController::class, 'reject'])->name('peminjaman.reject');
 
+    Route::get('pengembalian', [PengembalianController::class, 'index'])->name('pengembalian.index');
 });
 
 Route::get('/user', function () {

@@ -101,7 +101,7 @@
                 <a href="{{ route('barang.index') }}" class="nav-link"><i class="fas fa-box"></i>DATA BARANG</a>
                 <a href="{{ route('kategori.index') }}" class="nav-link"><i class="fas fa-folder"></i>DATA KATEGORI</a>
                 <a href="{{route('peminjaman.index')}}" class="nav-link"><i class="fas fa-folder-open"></i>DATA PEMINJAMAN</a>
-                <a href="/pengembalian" class="nav-link"><i class="fas fa-undo"></i>DATA PENGEMBALIAN</a>
+                <a href="{{route('pengembalian.index')}}" class="nav-link"><i class="fas fa-undo"></i>DATA PENGEMBALIAN</a>
                 {{-- <a href="/history/peminjaman" class="nav-link"><i class="fas fa-file-alt"></i>HISTORY PEMINJAMAN</a>
                 <a href="/history/pengembalian" class="nav-link"><i class="fas fa-file-alt"></i>HISTORY PENGEMBALIAN</a> --}}
 
@@ -121,7 +121,7 @@
                     <i class="fas fa-chevron-down submenu-icon" id="laporanIcon"></i>
                 </a>
                 <div class="collapse" id="laporanSubmenu">
-                    <a href="{{route('laporan.barang')}}" class="nav-link ms-3"><i class="fas fa-angle-right"></i> Laporan Peminjaman</a>
+                    <a href="{{route('laporan.barang')}}" class="nav-link ms-3"><i class="fas fa-angle-right"></i> Laporan Barang</a>
                     <a href="/laporan/pengembalian" class="nav-link ms-3"><i class="fas fa-angle-right"></i> Laporan Pengembalian</a>
                 </div>
             </div>

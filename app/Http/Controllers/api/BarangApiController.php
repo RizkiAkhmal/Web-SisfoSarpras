@@ -18,8 +18,8 @@ class BarangApiController extends Controller
                 'nama_barang' => $barang->nama_barang,
                 'jumlah_barang' => $barang->jumlah_barang,
                 'id_kategori' => $barang->id_kategori,
-                'foto' => url('storage/' . $barang->foto), // tampilkan URL lengkap foto
-                // 'foto' => $barang->foto,
+                // 'foto' => url('storage/' . $barang->foto), // tampilkan URL lengkap foto
+                'foto' => $barang->foto,
                 'kategori' => [
                     'id' => $barang->kategoris->id,
                     'nama_kategori' => $barang->kategoris->nama_kategori,
