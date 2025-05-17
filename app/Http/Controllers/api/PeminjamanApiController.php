@@ -41,19 +41,28 @@ class PeminjamanApiController extends Controller
         ], 201);
     }
 
-//     public function getByUser(Request $request){
-//     $user = $request->user(); // Ambil user dari token Sanctum
+    public function getByUser(Request $request){
+    $user = $request->user(); // Ambil user dari token Sanctum
 
-//     $peminjaman = Peminjaman::with(['barang']) // pastikan relasi barang() sudah dibuat
-//         ->where('id_user', $user->id)
-//         ->orderBy('created_at', 'desc')
-//         ->get();
+    $peminjaman = Peminjaman::with(['barang']) // pastikan relasi barang() sudah dibuat
+        ->where('id_user', $user->id)
+        ->orderBy('created_at', 'desc')
+        ->get();
 
-//     return response()->json([
-//         'message' => 'Data peminjaman user berhasil dimuat',
-//         'data' => $peminjaman,
-//      ]);
-// }
+    return response()->json([
+        'message' => 'Data peminjaman user berhasil dimuat',
+        'data' => $peminjaman,
+     ]);
+    }
+
+    public function index()
+    {
+        $peminjamans = Peminjaman::all();
+        return response()->json([
+            'success' => true,
+            'data' => $peminjamans
+        ]);
+    }
 }
 
     

@@ -29,4 +29,10 @@ class Peminjaman extends Model
     public function user(){
         return $this->belongsTo(User::class, 'id_user');
     }
+
+    public function pengembalian()
+    {
+        return $this->hasOne(Pengembalian::class, 'id_peminjaman'); 
+    }
+
 }

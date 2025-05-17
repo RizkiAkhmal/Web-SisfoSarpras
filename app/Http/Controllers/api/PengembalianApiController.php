@@ -57,7 +57,7 @@ class PengembalianApiController extends Controller
 
         // Kembalikan stok barang
         if ($peminjaman->barang) {
-            $peminjaman->barang->increment('stok', $validated['jumlah_kembali']);
+            $peminjaman->barang->increment('jumlah_barang', $validated['jumlah_kembali']);
         }
 
         return response()->json([
@@ -99,14 +99,14 @@ class PengembalianApiController extends Controller
     // Menampilkan peminjaman yang belum dikembalikan
     public function getPeminjamanBelumDikembalikan()
     {
-        $peminjamans = Peminjaman::with('barang')
+        $peminjaman = Peminjaman::with('barang')
             ->where('status', '!=', 'returned')
             ->latest()
             ->get();
 
         return response()->json([
             'success' => true,
-            'data'    => $peminjamans
+            'data'    => $peminjaman
         ]);
     }
 }
