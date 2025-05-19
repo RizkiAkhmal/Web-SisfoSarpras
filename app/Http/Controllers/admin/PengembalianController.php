@@ -3,26 +3,37 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pengembalian;
 use Illuminate\Http\Request;
+use App\Models\Pengembalian;
+use App\Models\Peminjaman;
 
 class PengembalianController extends Controller
 {
-    // Tampilkan daftar semua pengembalian
+    /**
+     * Tampilkan daftar pengembalian ke admin tanpa filter dan search.
+     */
     public function index()
     {
-        $pengembalians = Pengembalian::with('peminjaman')->get();
+        $pengembalians = Pengembalian::with(['peminjaman', 'peminjaman.barang'])
+            ->latest()
+            ->get();
+
         return view('admin.pengembalian.index', compact('pengembalians'));
     }
 
-    // Setujui pengembalian
+    /**
+     * Menyetujui pengembalian (status 'complete').
+     */
     public function approve($id)
     {
         $pengembalian = Pengembalian::findOrFail($id);
 
         if ($pengembalian->status === 'complete') {
-            return redirect()->route('admin.pengembalian.index')
-                ->with('error', 'Pengembalian sudah diselesaikan.');
+            return redirect()->route('pengembalian.index')->with('error', 'Pengembalian ini sudah diselesaikan.');
+        }
+
+        if (method_exists($pengembalian, 'hitungKeterlambatan')) {
+            $pengembalian->hitungKeterlambatan();
         }
 
         $pengembalian->update(['status' => 'complete']);
@@ -32,48 +43,55 @@ class PengembalianController extends Controller
 
         $barang = $peminjaman->barang;
         if ($barang) {
-            $barang->increment('stok', $pengembalian->jumlah_kembali);
+            $barang->increment('jumlah_barang', $pengembalian->jumlah_kembali);
         }
 
-        return redirect()->route('admin.pengembalian.index')
-            ->with('success', 'Pengembalian disetujui.');
+        return redirect()->route('pengembalian.index')->with('success', 'Pengembalian berhasil disetujui.');
     }
 
-    // Tolak pengembalian (barang rusak)
+    /**
+     * Menandai pengembalian sebagai rusak (status 'damage').
+     */
     public function reject($id)
     {
         $pengembalian = Pengembalian::findOrFail($id);
+
+        $pengembalian->update(['status' => 'damage']);
 
         $peminjaman = $pengembalian->peminjaman;
         $peminjaman->update(['status' => 'rejected']);
 
         $barang = $peminjaman->barang;
         if ($barang) {
-            $barang->decrement('stok', $pengembalian->jumlah_kembali);
+            $barang->decrement('jumlah_barang', $pengembalian->jumlah_kembali);
         }
 
-        return redirect()->route('admin.pengembalian.index')
-            ->with('success', 'Barang rusak berhasil ditandai.');
+        return redirect()->route('pengembalian.index')->with('success', 'Pengembalian barang rusak berhasil ditandai.');
     }
 
-    // Tampilkan form pengembalian rusak
-    public function damaged($id)
+    /**
+     * Menampilkan form input denda untuk pengembalian rusak.
+     */
+    public function markDamaged($id)
     {
         $pengembalian = Pengembalian::findOrFail($id);
-        return view('admin.pengembalian.damaged', compact('pengembalian'));
+        return view('admin.pengembalian.markDamaged', compact('pengembalian'));
     }
 
-    // Update status kerusakan dan denda
-    public function updateDamage(Request $request, $id)
+    /**
+     * Menyimpan denda untuk pengembalian rusak.
+     */
+    public function updateDamaged(Request $request, $id)
     {
         $validated = $request->validate([
             'denda' => 'required|numeric|min:0',
         ]);
 
         $pengembalian = Pengembalian::findOrFail($id);
+
         $pengembalian->update([
             'status' => 'damage',
-            'denda' => $validated['denda'],
+            'biaya_denda' => $validated['denda'],
         ]);
 
         $peminjaman = $pengembalian->peminjaman;
@@ -81,11 +99,9 @@ class PengembalianController extends Controller
 
         $barang = $peminjaman->barang;
         if ($barang) {
-            $barang->increment('stok', $pengembalian->jumlah_dikembalikan);
+            $barang->increment('jumlah_barang', $pengembalian->jumlah_kembali);
         }
 
-        return redirect()->route('admin.pengembalian.index')
-            ->with('success', 'Denda pengembalian rusak berhasil diperbarui.');
+        return redirect()->route('pengembalian.index')->with('success', 'Denda pengembalian rusak berhasil diperbarui.');
     }
-
 }

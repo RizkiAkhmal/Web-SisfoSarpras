@@ -17,7 +17,7 @@ return new class extends Migration
         $table->string('nama_barang');
         $table->integer('jumlah_barang'); 
         $table->foreignId('id_kategori')->constrained('kategoris');
-        $table->text('foto');
+        $table->string('foto');
         $table->timestamps();
         });
 

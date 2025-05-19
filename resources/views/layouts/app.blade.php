@@ -105,6 +105,16 @@
                 {{-- <a href="/history/peminjaman" class="nav-link"><i class="fas fa-file-alt"></i>HISTORY PEMINJAMAN</a>
                 <a href="/history/pengembalian" class="nav-link"><i class="fas fa-file-alt"></i>HISTORY PENGEMBALIAN</a> --}}
 
+                                <!-- Laporan Menu with Submenu -->
+                <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#laporanSubmenu" role="button" aria-expanded="false" aria-controls="laporanSubmenu">
+                    <span><i class="fas fa-chart-line"></i> LAPORAN</span>
+                    <i class="fas fa-chevron-down submenu-icon" id="laporanIcon"></i>
+                </a>
+                <div class="collapse" id="laporanSubmenu">
+                    <a href="{{route('laporan.barang')}}" class="nav-link ms-3"><i class="fas fa-angle-right"></i> Laporan Barang</a>
+                    <a href="{{route('laporan.peminjaman')}}" class="nav-link ms-3"><i class="fas fa-angle-right"></i> Laporan Peminjamann</a>
+                </div>
+
                 <!-- Laporan Menu with Submenu -->
                 <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#historySubmenu" role="button" aria-expanded="false" aria-controls="laporanSubmenu">
                     <span><i class="fas fa-chart-line"></i> HISTORY </span>
@@ -115,15 +125,7 @@
                     <a href="/laporan/pengembalian" class="nav-link ms-3"><i class="fas fa-angle-right"></i> History Pengembalian</a>
                 </div>
 
-                <!-- Laporan Menu with Submenu -->
-                <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#laporanSubmenu" role="button" aria-expanded="false" aria-controls="laporanSubmenu">
-                    <span><i class="fas fa-chart-line"></i> LAPORAN</span>
-                    <i class="fas fa-chevron-down submenu-icon" id="laporanIcon"></i>
-                </a>
-                <div class="collapse" id="laporanSubmenu">
-                    <a href="{{route('laporan.barang')}}" class="nav-link ms-3"><i class="fas fa-angle-right"></i> Laporan Barang</a>
-                    <a href="/laporan/pengembalian" class="nav-link ms-3"><i class="fas fa-angle-right"></i> Laporan Pengembalian</a>
-                </div>
+
             </div>
 
             <div class="logout-button">

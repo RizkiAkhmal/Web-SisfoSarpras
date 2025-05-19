@@ -21,7 +21,7 @@
             @method('PUT')
 
             {{-- Tampilkan foto lama --}}
-            {{-- @if ($barang->foto)
+            @if ($barang->foto)
                 <div class="mb-3">
                     <label>Foto Lama:</label><br>
                     <img src="{{ asset('storage/' . $barang->foto) }}" alt="Foto Barang" width="150" class="img-thumbnail">
@@ -31,9 +31,9 @@
             <div class="mb-3">
                 <label for="foto" class="form-label">Ganti Foto (Opsional)</label>
                 <input type="file" name="foto" class="form-control" accept="image/*">
-            </div> --}}
+            </div>
 
-            <div class="mb-3">
+            {{-- <div class="mb-3">
                 <label for="foto" class="form-label">Link Foto Barang</label>
                 <input type="text" name="foto" id="foto" class="form-control" placeholder="https://..." value="{{ old('foto', $barang->foto) }}">
                 @if ($barang->foto)
@@ -41,7 +41,7 @@
                         <img src="{{ $barang->foto }}" alt="Foto Barang" style="max-width: 200px;" class="img-thumbnail">
                     </div>
                 @endif
-            </div>
+            </div> --}}
             
             
             <div class="mb-3">

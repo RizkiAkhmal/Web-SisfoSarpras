@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\KategoriController;
 use App\Http\Controllers\admin\LaporanController;
 use App\Http\Controllers\admin\PeminjamanController;
 use App\Http\Controllers\Admin\PengembalianController;
+use App\Models\Peminjaman;
 use App\Models\Pengembalian;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function() {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     
     Route::get('/laporan/barang', [LaporanController::class, 'index'])->name('laporan.barang');
+    Route::get('/laporan/peminjaman', [LaporanController::class, 'peminjaman'])->name('laporan.peminjaman');
 
     Route::get('/barang', [BarangController::class, 'index'])->name('barang.index');
     Route::get('/barang/create', [BarangController::class, 'create'])->name('barang.create');
@@ -49,7 +51,14 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function() {
     Route::post('peminjaman/{id}/approve', [PeminjamanController::class, 'approve'])->name('peminjaman.approve');
     Route::post('peminjaman/{id}/reject', [PeminjamanController::class, 'reject'])->name('peminjaman.reject');
 
+    // Route::get('pengembalian', [PengembalianController::class, 'index'])->name('pengembalian.index');
+
     Route::get('pengembalian', [PengembalianController::class, 'index'])->name('pengembalian.index');
+    Route::post('pengembalian/{id}/approve', [PengembalianController::class, 'approve'])->name('pengembalian.approve');
+    Route::post('pengembalian/{id}/reject', [PengembalianController::class, 'reject'])->name('pengembalian.reject');
+    Route::get('pengembalian/{id}/mark-damaged', [PengembalianController::class, 'markDamaged'])->name('pengembalian.markDamaged');
+    Route::put('pengembalian/{id}/update-damaged', [PengembalianController::class, 'updateDamaged'])->name('pengembalian.updateDamaged');
+
 });
 
 Route::get('/user', function () {

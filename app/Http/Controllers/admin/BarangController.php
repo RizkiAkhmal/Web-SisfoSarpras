@@ -27,14 +27,19 @@ class BarangController extends Controller
             'nama_barang'   => 'required|string|max:255',
             'jumlah_barang' => 'required|integer',
             'id_kategori'   => 'required|exists:kategoris,id',
-            'foto'          => 'nullable|url'
+            'foto' => 'required|image|mimes:jpeg,png,jpg',
+            // 'foto'          => 'nullable|url'
         ]);
+
+        $foto = $request->file('foto');
+        $foto->storeAs('public', $foto->hashName()); // Store foto in public storage
 
         Barang::create([
             'nama_barang'   => $request->nama_barang,
             'jumlah_barang' => $request->jumlah_barang,
             'id_kategori'   => $request->id_kategori,
-            'foto'          => $request->foto, // simpan URL foto
+            // 'foto'          => $request->foto, // simpan URL foto
+            'foto' => $foto->hashName(), // Store the hashed filename
         ]);
 
         return redirect()->route('barang.index')->with('success', 'Barang berhasil ditambahkan.');
@@ -49,25 +54,42 @@ class BarangController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'nama_barang'   => 'required|string|max:255',
-            'jumlah_barang' => 'required|integer',
-            'id_kategori'   => 'required|exists:kategoris,id',
-            'foto'          => 'nullable|url'
-        ]);
+{
+    // Validasi input
+    $request->validate([
+        'nama_barang'   => 'required|string|max:255',
+        'jumlah_barang' => 'required|integer',
+        'id_kategori'   => 'required|exists:kategoris,id',
+        'foto'          => 'nullable|image|mimes:jpeg,png,jpg',
+    ]);
 
-        $barang = Barang::findOrFail($id);
+    // Ambil data barang berdasarkan ID
+    $barang = Barang::findOrFail($id);
 
+    // Cek jika ada file foto baru
+    if ($request->hasFile('foto')) {
+        $foto = $request->file('foto');
+        $foto->storeAs('public', $foto->hashName());
+
+        // Update semua data termasuk foto
         $barang->update([
             'nama_barang'   => $request->nama_barang,
             'jumlah_barang' => $request->jumlah_barang,
             'id_kategori'   => $request->id_kategori,
-            'foto'          => $request->foto, // ganti URL foto lama
+            'foto'          => $foto->hashName(),
         ]);
-
-        return redirect()->route('barang.index')->with('success', 'Barang berhasil diperbarui.');
+    } else {
+        // Update data tanpa mengganti foto
+        $barang->update([
+            'nama_barang'   => $request->nama_barang,
+            'jumlah_barang' => $request->jumlah_barang,
+            'id_kategori'   => $request->id_kategori,
+        ]);
     }
+
+    return redirect()->route('barang.index')->with('success', 'Barang berhasil diperbarui.');
+}
+
 
     public function delete($id)
     {

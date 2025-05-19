@@ -40,6 +40,7 @@ Route::prefix('fe')->group(function () {
 Route::middleware('auth:sanctum')->get('/barang', [BarangApiController::class, 'index']);
 
 
+
 //baru
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/peminjaman', [PeminjamanApiController::class, 'index']);
@@ -47,9 +48,10 @@ Route::middleware('auth:sanctum')->group(function () {
      Route::get('/peminjaman/user', [PeminjamanApiController::class, 'getByUser']);
     // Pengembalian
     Route::get('/pengembalian/index', [PengembalianApiController::class, 'index']);
-    Route::get('/pengembalian/{id}', [PengembalianApiController::class, 'show']);
-    Route::post('/pengembalian', [PengembalianApiController::class, 'store']);
+     Route::get('/pengembalian/{id}', [PengembalianApiController::class, 'show']);
+     Route::post('/pengembalian', [PengembalianApiController::class, 'store']);
     Route::get('pengembalian/belum-dikembalikan', [PengembalianApiController::class, 'getPeminjamanBelumDikembalikan']);
+
 });
 
 

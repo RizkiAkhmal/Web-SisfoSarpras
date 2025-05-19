@@ -26,14 +26,14 @@
             <form action="{{ route('barang.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                {{-- <div class="mb-3">
+                <div class="mb-3">
                     <label for="foto" class="form-label">Foto Barang</label>
                     <input type="file" class="form-control" name="foto" accept="image/jpeg,image/png,image/jpg" required>
-                </div> --}}
-                <div class="mb-3">
+                </div>
+                {{-- <div class="mb-3">
                     <label for="foto" class="form-label">Link Foto Barang</label>
                     <input type="text" name="foto" id="foto" class="form-control" placeholder="https://..." value="{{ old('foto') }}">
-                </div>
+                </div> --}}
 
                 <div class="mb-3">
                     <label for="nama_barang" class="form-label">Nama Barang</label>

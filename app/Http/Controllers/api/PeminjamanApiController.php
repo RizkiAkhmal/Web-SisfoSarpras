@@ -57,7 +57,7 @@ class PeminjamanApiController extends Controller
 
     public function index()
     {
-        $peminjamans = Peminjaman::all();
+        $peminjamans = Peminjaman::with(['barang'])->get();
         return response()->json([
             'success' => true,
             'data' => $peminjamans
