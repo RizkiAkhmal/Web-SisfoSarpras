@@ -2,28 +2,51 @@
 
 @section('content')
 <div class="container py-4">
-    <div class="card border shadow-sm">
+    <div class="card border-0 shadow-sm">
         <div class="card-header bg-white py-3 border-bottom">
             <div class="d-flex justify-content-between align-items-center">
-                <h2 class="h2 mb-0">Daftar Pengembalian</h2>
-                <div class="text-muted">
-                    <i class="bi bi-box-arrow-in-left me-1"></i>
-                    Total: {{ $pengembalians->count() }} Pengembalian
+                <h5 class="mb-0 fw-bold">Laporan Pengembalian</h5>
+                <div>
+                    <a href="{{ route('laporan.pengembalian.export') }}" class="btn btn-success me-2">
+                        <i class="fas fa-file-excel me-1"></i> Export Excel
+                    </a>
+                    <a href="{{ route('laporan.pengembalian.pdf') }}" class="btn btn-danger">
+                        <i class="fas fa-file-pdf me-1"></i> Export PDF
+                    </a>
                 </div>
             </div>
         </div>
 
-        <div class="card-body p-0">
-            @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
-                    <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <!-- Search Bar -->
+        <div class="card-body border-bottom">
+            <form action="{{ route('laporan.pengembalian') }}" method="GET" class="row g-3 align-items-center">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="fas fa-search text-muted"></i>
+                        </span>
+                        <input type="text" name="search" class="form-control border-start-0 shadow-none"
+                            placeholder="Cari nama pengembali atau barang..." value="{{ request('search') }}"
+                            autocomplete="off">
+                        @if (request('search'))
+                            <a href="{{ route('laporan.pengembalian') }}" class="btn btn-outline-secondary border-start-0">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        @endif
+                    </div>
                 </div>
-            @endif
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search me-2"></i>Cari
+                    </button>
+                </div>
+            </form>
+        </div>
 
+        <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover table-striped mb-0 border-top">
-                    <thead class="table-light">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead class="bg-light">
                         <tr>
                             <th class="border-end text-center" style="width: 60px">No</th>
                             <th class="border-end">Nama Pengembali</th>
@@ -32,23 +55,20 @@
                             <th class="border-end text-center" style="width: 80px">Jumlah</th>
                             <th class="border-end">Kondisi</th>
                             <th class="border-end text-end" style="width: 120px">Denda</th>
-                            <th class="border-end text-center" style="width: 100px">Status</th>
-                            <th class="text-center" style="width: 120px">Aksi</th>
+                            <th class="text-center" style="width: 100px">Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($pengembalians as $pengembalian)
+                        @forelse($pengembalians as $index => $pengembalian)
                         <tr>
-                            <td class="border-end text-center">{{ $loop->iteration }}</td>
+                            <td class="border-end text-center">{{ $index + 1 }}</td>
                             <td class="border-end">
                                 <div class="d-flex align-items-center">
-                                    <i class="bi bi-person-circle me-2 text-muted"></i>
                                     {{ $pengembalian->nama_pengembali }}
                                 </div>
                             </td>
                             <td class="border-end">
                                 <div class="d-flex align-items-center">
-                                    <i class="bi bi-box me-2 text-muted"></i>
                                     {{ $pengembalian->peminjaman->barang->nama_barang ?? '-' }}
                                 </div>
                             </td>
@@ -76,7 +96,7 @@
                                     <span class="text-muted">-</span>
                                 @endif
                             </td>
-                            <td class="border-end text-center">
+                            <td class="text-center">
                                 @if($pengembalian->status === 'complete')
                                     <span class="badge bg-success">Complete</span>
                                 @elseif($pengembalian->status === 'damage')
@@ -85,39 +105,17 @@
                                     <span class="badge bg-warning">Pending</span>
                                 @endif
                             </td>
-                            <td class="text-center">
-                                @if (!in_array($pengembalian->status, ['complete', 'damage']))
-                                    <div class="btn-group">
-                                        <form method="POST" 
-                                              action="{{ route('pengembalian.approve', $pengembalian->id) }}" 
-                                              class="d-inline me-1">
-                                            @csrf
-                                            <button type="submit" 
-                                                    class="btn btn-sm btn-success" 
-                                                    data-bs-toggle="tooltip" 
-                                                    title="Selesaikan Pengembalian" 
-                                                    onclick="return confirm('Selesaikan pengembalian ini?')">
-                                                <i class="bi bi-check-lg"></i> Setujui
-                                            </button>
-                                        </form>
-
-                                        <a href="{{ route('pengembalian.markDamaged', $pengembalian->id) }}" 
-                                           class="btn btn-sm btn-danger" 
-                                           data-bs-toggle="tooltip" 
-                                           title="Tandai Rusak & Input Denda">
-                                            <i class="bi bi-exclamation-triangle"></i> Rusak
-                                        </a>
-                                    </div>
-                                @elseif($pengembalian->status === 'complete')
-                                    <span class="badge bg-success">Selesai</span>
-                                @elseif($pengembalian->status === 'damage')
-                                    <span class="badge bg-danger">Rusak</span>
-                                @else
-                                    <span class="text-muted">-</span>
-                                @endif
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <div class="d-flex flex-column align-items-center">
+                                    <i class="fas fa-undo text-muted mb-3" style="font-size: 2rem;"></i>
+                                    <h6 class="fw-bold text-muted">Belum ada data pengembalian</h6>
+                                </div>
                             </td>
                         </tr>
-                        @endforeach
+                        @endforelse
                     </tbody>
                 </table>
             </div>

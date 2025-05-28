@@ -9,10 +9,25 @@ use Illuminate\Http\Request;
 
 class BarangController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $barangs = Barang::all();
-        return view('admin.barang.index', compact('barangs'));
+        $query = Barang::query();
+
+        // Handle searchbar
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama_barang', 'like', "%{$search}%")
+                  ->orWhereHas('kategoris', function($q) use ($search) {
+                      $q->where('nama_kategori', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $barangs = $query->get();
+        $kategoris = Kategori::all(); // For dropdown filter if needed later
+
+        return view('admin.barang.index', compact('barangs', 'kategoris'));
     }
 
     public function create()
@@ -45,16 +60,14 @@ class BarangController extends Controller
         return redirect()->route('barang.index')->with('success', 'Barang berhasil ditambahkan.');
     }
 
-    public function edit($id)
-    {
+    public function edit($id){
         $barang = Barang::findOrFail($id);
         $kategoris = Kategori::all();
 
         return view('admin.barang.edit', compact('barang', 'kategoris'));
     }
 
-    public function update(Request $request, $id)
-{
+    public function update(Request $request, $id){
     // Validasi input
     $request->validate([
         'nama_barang'   => 'required|string|max:255',

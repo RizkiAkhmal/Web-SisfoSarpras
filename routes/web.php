@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\KategoriController;
 use App\Http\Controllers\admin\LaporanController;
 use App\Http\Controllers\admin\PeminjamanController;
 use App\Http\Controllers\Admin\PengembalianController;
+use App\Http\Controllers\admin\UserController;
 use App\Models\Peminjaman;
 use App\Models\Pengembalian;
 use Illuminate\Support\Facades\Route;
@@ -28,9 +29,20 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Dashboard route
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function() {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+    Route::resource('user', UserController::class);
     
     Route::get('/laporan/barang', [LaporanController::class, 'index'])->name('laporan.barang');
     Route::get('/laporan/peminjaman', [LaporanController::class, 'peminjaman'])->name('laporan.peminjaman');
+    Route::get('/laporan/pengembalian', [LaporanController::class, 'pengembalian'])->name('laporan.pengembalian');
+
+    Route::get('/admin/laporan/barang/export', [LaporanController::class, 'exportBarang'])->name('laporan.barang.export');
+    Route::get('/admin/laporan/peminjaman/export', [LaporanController::class, 'exportPeminjaman'])->name('laporan.peminjaman.export');
+    Route::get('/admin/laporan/pengembalian/export', [LaporanController::class, 'exportPengembalian'])->name('laporan.pengembalian.export');
+
+    Route::get('/admin/laporan/barang/pdf', [LaporanController::class, 'exportBarangPdf'])->name('laporan.barang.pdf');
+    Route::get('/admin/laporan/peminjaman/pdf', [LaporanController::class, 'exportPeminjamanPdf'])->name('laporan.peminjaman.pdf');
+    Route::get('/admin/laporan/pengembalian/pdf', [LaporanController::class, 'exportPengembalianPdf'])->name('laporan.pengembalian.pdf');
 
     Route::get('/barang', [BarangController::class, 'index'])->name('barang.index');
     Route::get('/barang/create', [BarangController::class, 'create'])->name('barang.create');
@@ -45,7 +57,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function() {
     Route::get('/kategori/{id}/edit', [KategoriController::class, 'edit'])->name('kategori.edit');
     Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
     Route::delete('/kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
-
 
     Route::get('peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
     Route::post('peminjaman/{id}/approve', [PeminjamanController::class, 'approve'])->name('peminjaman.approve');
@@ -64,3 +75,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function() {
 Route::get('/user', function () {
     return ('user');
 })->middleware('auth', 'role:user');
+
+
+
+
+
+
+

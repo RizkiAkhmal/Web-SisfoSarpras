@@ -15,7 +15,6 @@ class PengembalianController extends Controller
     public function index()
     {
         $pengembalians = Pengembalian::with(['peminjaman', 'peminjaman.barang'])
-            ->latest()
             ->get();
 
         return view('admin.pengembalian.index', compact('pengembalians'));
@@ -91,6 +90,7 @@ class PengembalianController extends Controller
 
         $pengembalian->update([
             'status' => 'damage',
+            'kondisi' => 'rusak',
             'biaya_denda' => $validated['denda'],
         ]);
 

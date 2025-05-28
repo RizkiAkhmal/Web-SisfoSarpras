@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('jumlah_kembali');
             $table->date('tgl_kembali');
             $table->enum('status',['pending', 'complete', 'damage'])->default('pending');
-            $table->string('kondisi'); 
+            $table->enum('kondisi', ['baik', 'rusak', 'hilang']); 
             $table->decimal('biaya_denda', 9, 3)->default(0); 
             $table->timestamps();
         });

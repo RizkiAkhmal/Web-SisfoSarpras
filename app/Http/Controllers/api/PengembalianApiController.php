@@ -18,7 +18,7 @@ class PengembalianApiController extends Controller
             'tgl_kembali'       => 'required|date',
             'jumlah_kembali'    => 'required|integer|min:1',
             'status'            => 'required|in:pending,complete,damage',
-            'kondisi'           => 'required|string|max:255',
+            'kondisi'           => 'required|in:baik,rusak',
             'biaya_denda'       => 'nullable|numeric|min:0',
         ]);
 
