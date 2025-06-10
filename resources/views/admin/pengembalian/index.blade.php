@@ -68,8 +68,20 @@
                                 @endif
                             </td>
                             <td class="border-end text-end">
-                                @if($pengembalian->biaya_denda > 0)
+                                @if($pengembalian->status === 'pending')
+                                    @if($pengembalian->infoDenda['hari_terlambat'] > 0)
+                                        <span class="text-danger">
+                                            {{ $pengembalian->infoDenda['hari_terlambat'] }} hari<br>
+                                            Rp{{ number_format($pengembalian->infoDenda['denda_keterlambatan'], 0, ',', '.') }}
+                                        </span>
+                                    @else
+                                        <span class="text-success">Tepat waktu</span>
+                                    @endif
+                                @elseif($pengembalian->biaya_denda > 0)
                                     <span class="text-danger">
+                                        @if($pengembalian->hari_terlambat > 0)
+                                            {{ $pengembalian->hari_terlambat }} hari<br>
+                                        @endif
                                         Rp{{ number_format($pengembalian->biaya_denda, 0, ',', '.') }}
                                     </span>
                                 @else
@@ -108,10 +120,6 @@
                                             <i class="bi bi-exclamation-triangle"></i> Rusak
                                         </a>
                                     </div>
-                                @elseif($pengembalian->status === 'complete')
-                                    <span class="badge bg-success">Selesai</span>
-                                @elseif($pengembalian->status === 'damage')
-                                    <span class="badge bg-danger">Rusak</span>
                                 @else
                                     <span class="text-muted">-</span>
                                 @endif

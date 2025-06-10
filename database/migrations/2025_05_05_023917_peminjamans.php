@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('peminjamans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_user')->constrained('users');
-            $table->foreignId('id_barang')->constrained('barangs');
+            $table->unsignedBigInteger('id_user');
+            $table->unsignedBigInteger('id_barang');
             // $table->string('nama_peminjam');
             $table->string('alasan_pinjam');
             $table->string('jumlah');
@@ -22,7 +22,11 @@ return new class extends Migration
             $table->date('tgl_kembali');
             $table->enum('status', ['pending', 'approved', 'rejected', 'returned'])->default('pending');
             $table->timestamps();
+            
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('id_barang')->references('id')->on('barangs')->onDelete('cascade');
         });
+
         
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Kategori;
+use App\Models\Barang;
 use Illuminate\Http\Request;
 
 class KategoriController extends Controller
@@ -50,10 +51,26 @@ class KategoriController extends Controller
         ]);
 
         return redirect()->route('kategori.index')->with('success', 'Kategori berhasil diperbarui.');
-    }
+     }
+
 
     public function destroy($id) {
-        Kategori::findOrFail($id)->delete();
-        return redirect()->route('kategori.index')->with('success', 'Kategori berhasil dihapus.');
+        $kategori = Kategori::findOrFail($id);
+        
+        // Cek apakah kategori masih digunakan oleh barang
+        $barangCount = Barang::where('id_kategori', $id)->count();
+        
+        if ($barangCount > 0) {
+            return redirect()->route('kategori.index')
+                ->with('error', 'Kategori tidak dapat dihapus karena masih digunakan oleh ' . $barangCount . ' barang.');
+        }
+        
+        // Jika tidak digunakan, hapus kategori
+        $kategori->delete();
+        
+        return redirect()->route('kategori.index')
+            ->with('success', 'Kategori berhasil dihapus.');
     }
 }
+
+

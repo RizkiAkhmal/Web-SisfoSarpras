@@ -34,12 +34,9 @@
                                     <span class="input-group-text bg-light border-end-0">
                                         <i class="fas fa-search text-muted"></i>
                                     </span>
-                                    <input type="text" 
-                                           name="search" 
-                                           class="form-control border-start-0 shadow-none" 
-                                           placeholder="Cari barang atau kategori..." 
-                                           value="{{ request('search') }}"
-                                           autocomplete="off">
+                                    <input type="text" name="search" class="form-control border-start-0 shadow-none"
+                                        placeholder="Cari barang atau kategori..." value="{{ request('search') }}"
+                                        autocomplete="off">
                                     @if(request('search'))
                                         <a href="{{ route('barang.index') }}" class="btn btn-outline-secondary border-start-0">
                                             <i class="fas fa-times"></i>
@@ -57,10 +54,22 @@
                 </div>
 
                 <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-white py-3">
-                        
-                    </div>
+                    
                     <div class="card-body p-0">
+                        @if (session('success'))
+                            <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
+                                <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+                        
+                        @if (session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show m-3" role="alert">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ session('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+                        
                         <div class="table-responsive">
                             <table class="table table-striped table-hover align-middle mb-0 border-top">
                                 <thead class="bg-light">
@@ -118,10 +127,8 @@
                                                           class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" 
-                                                                class="btn btn-danger btn-sm"
-                                                                title="Hapus Barang"
-                                                                onclick="return confirm('Apakah Anda yakin ingin menghapus barang ini?')">
+                                                        <button type="submit" class="btn btn-danger btn-sm"
+                                                            onclick="return confirm('Apakah Anda yakin ingin menghapus barang ini?')">
                                                             <i class="fas fa-trash me-1"></i>Hapus
                                                         </button>
                                                     </form>

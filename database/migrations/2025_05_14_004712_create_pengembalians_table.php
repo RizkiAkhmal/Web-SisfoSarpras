@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('pengembalians', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_peminjaman')->constrained('peminjamans');
             $table->string('nama_pengembali');
             $table->integer('jumlah_kembali');
             $table->date('tgl_kembali');
             $table->enum('status',['pending', 'complete', 'damage'])->default('pending');
             $table->enum('kondisi', ['baik', 'rusak', 'hilang']); 
-            $table->decimal('biaya_denda', 9, 3)->default(0); 
+            $table->decimal('biaya_denda', 12, 2)->default(0); // Increased to allow up to 10 million
             $table->timestamps();
+            
+            $table->foreignId('id_peminjaman')->references('id')->on('peminjamans')->onDelete('cascade');
         });
     }
 
@@ -32,3 +33,4 @@ return new class extends Migration
         Schema::dropIfExists('pengembalians');
     }
 };
+

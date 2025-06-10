@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
+    /* Base & Typography */
     * {
       box-sizing: border-box;
       font-family: 'Poppins', sans-serif;
@@ -23,17 +24,27 @@
       background-color: #f8f9fa;
     }
 
+    /* Layout */
     .wrapper {
       display: flex;
       min-height: 100vh;
     }
 
+    .main {
+      flex-grow: 1;
+      padding: 30px;
+      margin-left: 280px;
+      width: calc(100% - 280px);
+      background-color: #f8f9fa;
+    }
+
+    /* Sidebar */
     .sidebar {
       position: fixed;
       width: 280px;
       background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
       color: white;
-      padding: 15px; /* Increased padding */
+      padding: 15px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -44,15 +55,15 @@
 
     .sidebar .user-info {
       text-align: center;
-      margin-bottom: 15px; /* Increased margin */
+      margin-bottom: 15px;
       background: rgba(255,255,255,0.1);
-      border-radius: 10px; /* Increased radius */
-      padding: 12px 10px; /* Increased padding */
+      border-radius: 10px;
+      padding: 12px 10px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
     .sidebar .user-info h5 {
-      margin: 3px 0 5px; /* Increased bottom margin */
+      margin: 3px 0 5px;
       font-size: 1.1rem;
       font-weight: 600;
       color: #fff;
@@ -69,9 +80,9 @@
     .sidebar .nav-link {
       background-color: rgba(255,255,255,0.1);
       color: white;
-      margin: 6px 0; /* Increased margin */
-      border-radius: 8px; /* Increased radius */
-      padding: 10px 15px; /* Increased padding */
+      margin: 6px 0;
+      border-radius: 8px;
+      padding: 10px 15px;
       transition: all 0.3s ease;
       font-size: 0.9rem;
       font-weight: 500;
@@ -89,77 +100,23 @@
     }
 
     .sidebar .nav-link i {
-      margin-right: 10px; /* Increased margin */
+      margin-right: 10px;
       font-size: 1rem;
-      width: 24px; /* Increased width */
-      height: 24px; /* Increased height */
+      width: 24px;
+      height: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
       background: rgba(255,255,255,0.2);
-      border-radius: 6px; /* Increased radius */
-      padding: 5px; /* Increased padding */
+      border-radius: 6px;
+      padding: 5px;
     }
 
-    .main {
-      flex-grow: 1;
-      padding: 30px;
-      margin-left: 280px;
-      width: calc(100% - 280px);
-      background-color: #f8f9fa;
-    }
-    
-    .logout-button {
-      margin-top: 15px; /* Increased margin */
-    }
-    
-    .logout-button .btn {
-      padding: 10px; /* Increased padding */
-      font-size: 0.9rem;
-      font-weight: 500;
-      border-radius: 8px; /* Increased radius */
-      transition: all 0.3s;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px; /* Increased gap */
-    }
-    
-    .logout-button .btn:hover {
-      background-color: rgba(255,0,0,0.2);
-      border-color: rgba(255,0,0,0.3);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    
-    .logout-button .btn i {
-      font-size: 1rem;
-    }
-    
-    /* Styling untuk konten utama */
-    .container {
-      background-color: white;
-      border-radius: 12px; /* Increased radius */
-      padding: 30px; /* Increased padding */
-      box-shadow: 0 0 15px rgba(0,0,0,0.05);
-    }
-    
-    h2 {
-      color: #333;
-      font-weight: 600;
-      margin-bottom: 25px; /* Increased margin */
-      padding-bottom: 15px;
-      border-bottom: 1px solid #eee;
-    }
-    
-    /* Garis pemisah menu */
+    /* Menu divider */
     .menu-divider {
       height: 1px;
       background: rgba(255,255,255,0.2);
-      margin: 12px 0; /* Increased margin */
+      margin: 12px 0;
       position: relative;
     }
     
@@ -176,8 +133,8 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    
-    /* Warna berbeda untuk menu laporan */
+
+    /* Report link styling */
     .sidebar .nav-link.report-link {
       background-color: rgba(255,193,7,0.15);
     }
@@ -191,12 +148,54 @@
       background: rgba(255,193,7,0.3);
     }
 
-    /* Mengurangi jumlah menu yang ditampilkan agar tidak scroll */
-    .sidebar .menu-group {
-      margin-bottom: 10px; /* Space between menu groups */
+    /* Logout button */
+    .logout-button {
+      margin-top: 15px;
+    }
+    
+    .logout-button .btn {
+      padding: 10px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-radius: 8px;
+      transition: all 0.3s;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .logout-button .btn:hover {
+      background-color: rgba(255,0,0,0.2);
+      border-color: rgba(255,0,0,0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    .logout-button .btn i {
+      font-size: 1rem;
     }
 
-    /* Styling untuk tabel */
+    /* Content container */
+    .container {
+      background-color: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.05);
+    }
+    
+    h2 {
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    /* Table styling */
     .table {
       border-color: #e0e0e0;
     }
@@ -221,34 +220,17 @@
       color: #333;
     }
     
-    .table-hover tbody tr:hover {
-      background-color: rgba(0, 123, 255, 0.03);
-    }
+    /* Table variations */
+    .table-striped tbody tr:nth-of-type(odd) { background-color: rgba(0, 0, 0, 0.02); }
+    .table-striped tbody tr:nth-of-type(even) { background-color: #ffffff; }
+    .table-hover tbody tr:hover { background-color: rgba(0, 123, 255, 0.03); }
+    .table-striped.table-hover tbody tr:hover { background-color: rgba(0, 123, 255, 0.05); }
     
-    /* Warna selang-seling untuk tabel */
-    .table-striped tbody tr:nth-of-type(odd) {
-      background-color: rgba(0, 0, 0, 0.02);
-    }
-    
-    .table-striped tbody tr:nth-of-type(even) {
-      background-color: #ffffff;
-    }
-    
-    /* Hover pada tabel striped */
-    .table-striped.table-hover tbody tr:hover {
-      background-color: rgba(0, 123, 255, 0.05);
-    }
-    
-    .table-bordered {
-      border: 1px solid #e0e0e0;
-    }
-    
-    .table-bordered th,
-    .table-bordered td {
-      border: 1px solid #e0e0e0;
-    }
-    
-    /* Badge styling */
+    /* Table borders */
+    .table-bordered { border: 1px solid #e0e0e0; }
+    .table-bordered th, .table-bordered td { border: 1px solid #e0e0e0; }
+
+    /* Badges */
     .badge {
       padding: 0.4em 0.65em;
       font-weight: 500;
@@ -256,13 +238,26 @@
       border-radius: 4px;
     }
     
-    /* Button styling dalam tabel */
+    /* Badge colors */
+    .badge.bg-success { background-color: #28a745 !important; }
+    .badge.bg-danger { background-color: #dc3545 !important; }
+    .badge.bg-warning { background-color: #ffc107 !important; color: #212529; }
+    .badge.bg-info { background-color: #17a2b8 !important; }
+    .badge.bg-primary { background-color: #007bff !important; }
+    .badge.bg-secondary { background-color: #6c757d !important; }
+    .badge.bg-dark { background-color: #343a40 !important; }
+
+    /* Buttons */
+    .btn {
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    /* Table buttons */
     .table .btn {
       padding: 0.375rem 0.75rem;
       font-size: 0.875rem;
       border-radius: 4px;
-      font-weight: 500;
-      transition: all 0.2s ease;
     }
     
     .table .btn-sm {
@@ -274,67 +269,23 @@
       min-width: 70px;
     }
     
-    .table .btn-warning {
-      background-color: #ffc107;
-      border-color: #ffc107;
-      color: #212529;
-    }
+    /* Button colors */
+    .btn-warning { background-color: #ffc107; border-color: #ffc107; color: #212529; }
+    .btn-warning:hover { background-color: #e0a800; border-color: #d39e00; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
     
-    .table .btn-warning:hover {
-      background-color: #e0a800;
-      border-color: #d39e00;
-      color: #212529;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+    .btn-danger { background-color: #dc3545; border-color: #dc3545; color: #fff; }
+    .btn-danger:hover { background-color: #c82333; border-color: #bd2130; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
     
-    .table .btn-danger {
-      background-color: #dc3545;
-      border-color: #dc3545;
-      color: #fff;
-    }
+    .btn-success { background-color: #28a745; border-color: #28a745; color: #fff; }
+    .btn-success:hover { background-color: #218838; border-color: #1e7e34; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
     
-    .table .btn-danger:hover {
-      background-color: #c82333;
-      border-color: #bd2130;
-      color: #fff;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-    
-    .table .btn-success {
-      background-color: #28a745;
-      border-color: #28a745;
-      color: #fff;
-    }
-    
-    .table .btn-success:hover {
-      background-color: #218838;
-      border-color: #1e7e34;
-      color: #fff;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-    
-    .table .btn-primary {
-      background-color: #007bff;
-      border-color: #007bff;
-      color: #fff;
-    }
-    
-    .table .btn-primary:hover {
-      background-color: #0069d9;
-      border-color: #0062cc;
-      color: #fff;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* Styling untuk gap antar tombol */
-    .gap-2 {
-      gap: 0.5rem !important;
-    }
-    
-    /* Card styling untuk tabel */
+    .btn-primary { background-color: #007bff; border-color: #007bff; color: #fff; }
+    .btn-primary:hover { background-color: #0069d9; border-color: #0062cc; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+    /* Cards */
     .card {
       border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
       border: 1px solid #e0e0e0;
       overflow: hidden;
     }
@@ -349,34 +300,9 @@
       padding: 20px;
     }
     
-    /* Warna status */
-    .badge.bg-success {
-      background-color: #28a745 !important;
-    }
-    
-    .badge.bg-danger {
-      background-color: #dc3545 !important;
-    }
-    
-    .badge.bg-warning {
-      background-color: #ffc107 !important;
-      color: #212529;
-    }
-    
-    .badge.bg-info {
-      background-color: #17a2b8 !important;
-    }
-    
-    .badge.bg-primary {
-      background-color: #007bff !important;
-    }
-    
-    .badge.bg-secondary {
-      background-color: #6c757d !important;
-    }
-    
-    .badge.bg-dark {
-      background-color: #343a40 !important;
+    /* Utilities */
+    .gap-2 {
+      gap: 0.5rem !important;
     }
   </style>
 </head>
@@ -407,11 +333,11 @@
           <a href="{{ route('user.index') }}" class="nav-link {{ request()->routeIs('user.index') ? 'active' : '' }}">
             <i class="fas fa-users"></i> USER MANAGEMENT
           </a>
-          <a href="{{ route('barang.index') }}" class="nav-link {{ request()->routeIs('barang.index') ? 'active' : '' }}">
-            <i class="fas fa-box"></i> DATA BARANG
-          </a>
           <a href="{{ route('kategori.index') }}" class="nav-link {{ request()->routeIs('kategori.index') ? 'active' : '' }}">
             <i class="fas fa-folder"></i> DATA KATEGORI
+          </a>
+          <a href="{{ route('barang.index') }}" class="nav-link {{ request()->routeIs('barang.index') ? 'active' : '' }}">
+            <i class="fas fa-box"></i> DATA BARANG
           </a>
           <a href="{{ route('peminjaman.index') }}" class="nav-link {{ request()->routeIs('peminjaman.index') ? 'active' : '' }}">
             <i class="fas fa-folder-open"></i> DATA PEMINJAMAN

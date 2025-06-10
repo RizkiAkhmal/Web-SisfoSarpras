@@ -61,9 +61,18 @@
 
                             <div class="col-md-6">
                                 <div class="form-floating border rounded">
+                                    <input type="text" class="form-control bg-light" id="keterlambatan" 
+                                           value="{{ isset($pengembalian->infoDenda) ? $pengembalian->infoDenda['hari_terlambat'].' hari (Rp'.number_format($pengembalian->infoDenda['denda_keterlambatan'], 0, ',', '.').')' : '0 hari (Rp0)' }}" disabled>
+                                    <label for="keterlambatan" class="ps-3">Keterlambatan & Denda</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-floating border rounded">
                                     <input type="number" class="form-control" name="denda" id="denda" 
-                                           placeholder="Masukkan jumlah denda" required min="0">
-                                    <label for="denda" class="ps-3">Denda (Rp)</label>
+                                           placeholder="Masukkan jumlah denda kerusakan" required min="0">
+                                    <label for="denda" class="ps-3">Denda Kerusakan (Rp)</label>
+                                    <small class="text-muted ps-3">Denda ini akan ditambahkan dengan denda keterlambatan (jika ada)</small>
                                 </div>
                             </div>
                         </div>

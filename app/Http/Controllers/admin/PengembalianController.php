@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pengembalian;
-use App\Models\Peminjaman;
+use Carbon\Carbon;
 
 class PengembalianController extends Controller
 {
@@ -14,8 +14,9 @@ class PengembalianController extends Controller
      */
     public function index()
     {
-        $pengembalians = Pengembalian::with(['peminjaman', 'peminjaman.barang'])
+        $pengembalians = Pengembalian::with(['peminjaman', 'peminjaman.barang', 'peminjaman.user'])
             ->get();
+
 
         return view('admin.pengembalian.index', compact('pengembalians'));
     }
@@ -31,15 +32,22 @@ class PengembalianController extends Controller
             return redirect()->route('pengembalian.index')->with('error', 'Pengembalian ini sudah diselesaikan.');
         }
 
-        if (method_exists($pengembalian, 'hitungKeterlambatan')) {
-            $pengembalian->hitungKeterlambatan();
-        }
+        // Hitung denda keterlambatan
+        $infoDenda = $this->hitungInfoDenda($pengembalian);
+        
+        // Update pengembalian dengan denda keterlambatan
+        $pengembalian->update([
+            'status' => 'complete',
+            'hari_terlambat' => $infoDenda['hari_terlambat'],
+            'denda_keterlambatan' => $infoDenda['denda_keterlambatan'],
+            'biaya_denda' => $infoDenda['denda_keterlambatan'] // Total denda = denda keterlambatan
+        ]);
 
-        $pengembalian->update(['status' => 'complete']);
-
+        // Update status peminjaman menjadi 'returned' setelah pengembalian disetujui
         $peminjaman = $pengembalian->peminjaman;
         $peminjaman->update(['status' => 'returned']);
 
+        // Kembalikan stok barang
         $barang = $peminjaman->barang;
         if ($barang) {
             $barang->increment('jumlah_barang', $pengembalian->jumlah_kembali);
@@ -48,24 +56,14 @@ class PengembalianController extends Controller
         return redirect()->route('pengembalian.index')->with('success', 'Pengembalian berhasil disetujui.');
     }
 
+    
     /**
      * Menandai pengembalian sebagai rusak (status 'damage').
      */
     public function reject($id)
     {
         $pengembalian = Pengembalian::findOrFail($id);
-
-        $pengembalian->update(['status' => 'damage']);
-
-        $peminjaman = $pengembalian->peminjaman;
-        $peminjaman->update(['status' => 'rejected']);
-
-        $barang = $peminjaman->barang;
-        if ($barang) {
-            $barang->decrement('jumlah_barang', $pengembalian->jumlah_kembali);
-        }
-
-        return redirect()->route('pengembalian.index')->with('success', 'Pengembalian barang rusak berhasil ditandai.');
+        return redirect()->route('pengembalian.markDamaged', $pengembalian->id);
     }
 
     /**
@@ -74,6 +72,10 @@ class PengembalianController extends Controller
     public function markDamaged($id)
     {
         $pengembalian = Pengembalian::findOrFail($id);
+        
+        // Hitung denda keterlambatan untuk ditampilkan di form
+        $pengembalian->setAttribute('infoDenda', $this->hitungInfoDenda($pengembalian));
+        
         return view('admin.pengembalian.markDamaged', compact('pengembalian'));
     }
 
@@ -83,25 +85,65 @@ class PengembalianController extends Controller
     public function updateDamaged(Request $request, $id)
     {
         $validated = $request->validate([
-            'denda' => 'required|numeric|min:0',
+            'denda' => 'required|numeric|min:0|max:10000000', // Allow up to 10 million
         ]);
 
         $pengembalian = Pengembalian::findOrFail($id);
 
+        // Hitung denda keterlambatan
+        $infoDenda = $this->hitungInfoDenda($pengembalian);
+        
+        // Update pengembalian dengan denda kerusakan dan keterlambatan
+        $dendaKerusakan = $validated['denda'];
+        $totalDenda = $infoDenda['denda_keterlambatan'] + $dendaKerusakan;
+        
         $pengembalian->update([
             'status' => 'damage',
             'kondisi' => 'rusak',
-            'biaya_denda' => $validated['denda'],
+            'hari_terlambat' => $infoDenda['hari_terlambat'],
+            'denda_keterlambatan' => $infoDenda['denda_keterlambatan'],
+            'denda_kerusakan' => $dendaKerusakan,
+            'biaya_denda' => $totalDenda
         ]);
 
         $peminjaman = $pengembalian->peminjaman;
-        $peminjaman->update(['status' => 'rejected']);
+        $peminjaman->update(['status' => 'returned']);
 
+        // Kembalikan stok barang hanya jika kondisi tidak hilang
         $barang = $peminjaman->barang;
-        if ($barang) {
+        if ($barang && $pengembalian->kondisi !== 'hilang') {
             $barang->increment('jumlah_barang', $pengembalian->jumlah_kembali);
         }
 
         return redirect()->route('pengembalian.index')->with('success', 'Denda pengembalian rusak berhasil diperbarui.');
     }
+
+
+public function hitungInfoDenda(Pengembalian $pengembalian)
+{
+    $hariTerlambat = 0;
+    $dendaKeterlambatan = 0;
+    
+    if ($pengembalian->peminjaman) {
+        $tanggalHarusKembali = \Carbon\Carbon::parse($pengembalian->peminjaman->tgl_kembali);
+        $tanggalDikembalikan = \Carbon\Carbon::parse($pengembalian->tgl_kembali);
+
+        $hariTerlambat = $tanggalDikembalikan->greaterThan($tanggalHarusKembali) 
+            ? $tanggalDikembalikan->diffInDays($tanggalHarusKembali) 
+            : 0;
+
+        if ($hariTerlambat > 0) {
+            $tarifDenda = 50000;
+            $dendaKeterlambatan = $hariTerlambat * $tarifDenda; 
+        }
+    }
+
+    return [
+        'hari_terlambat' => $hariTerlambat,
+        'denda_keterlambatan' => $dendaKeterlambatan,
+    ];
 }
+
+}
+
+

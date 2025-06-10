@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Barang;
 use App\Models\Kategori;
+use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 
 class BarangController extends Controller
@@ -104,11 +105,43 @@ class BarangController extends Controller
 }
 
 
-    public function delete($id)
+    public function destroy($id)
     {
         $barang = Barang::findOrFail($id);
+        
+        // Cek apakah barang sedang dipinjam (status approved) dan belum dikembalikan
+        $activePeminjaman = Peminjaman::where('id_barang', $id)
+            ->where('status', 'approved')
+            ->whereNotExists(function ($query) {
+                $query->select('id')
+                      ->from('pengembalians')
+                      ->whereColumn('pengembalians.id_peminjaman', 'peminjamans.id')
+                      ->whereIn('pengembalians.status', ['complete', 'damage']);
+            })
+            ->count();
+        
+        if ($activePeminjaman > 0) {
+            return redirect()->route('barang.index')
+                ->with('error', 'Barang tidak dapat dihapus karena sedang dipinjam dan belum dikembalikan.');
+        }
+        
+        // Cek apakah ada permintaan peminjaman yang belum diproses
+        $pendingPeminjaman = Peminjaman::where('id_barang', $id)
+            ->where('status', 'pending')
+            ->count();
+            
+        if ($pendingPeminjaman > 0) {
+            return redirect()->route('barang.index')
+                ->with('error', 'Barang tidak dapat dihapus karena ada permintaan peminjaman yang belum diproses.');
+        }
+        
+        // Jika tidak sedang dipinjam, hapus barang
         $barang->delete();
 
-        return redirect()->route('barang.index')->with('success', 'Barang berhasil dihapus.');
+        return redirect()->route('barang.index')
+            ->with('success', 'Barang berhasil dihapus.');
     }
 }
+
+
+

@@ -18,7 +18,7 @@ class PengembalianApiController extends Controller
             'tgl_kembali'       => 'required|date',
             'jumlah_kembali'    => 'required|integer|min:1',
             'status'            => 'required|in:pending,complete,damage',
-            'kondisi'           => 'required|in:baik,rusak',
+            'kondisi'           => 'required|in:baik,rusak,hilang',
             'biaya_denda'       => 'nullable|numeric|min:0',
         ]);
 
@@ -47,18 +47,11 @@ class PengembalianApiController extends Controller
             'id_peminjaman'   => $validated['id_peminjaman'],
             'tgl_kembali'     => $validated['tgl_kembali'],
             'jumlah_kembali'  => $validated['jumlah_kembali'],
-            'status'          => $validated['status'],
+            'status'          => 'pending', // Force status to pending regardless of input
             'kondisi'         => $validated['kondisi'],
             'biaya_denda'     => $validated['biaya_denda'] ?? 0,
         ]);
 
-        // Update status peminjaman
-        $peminjaman->update(['status' => 'returned']);
-
-        // Kembalikan stok barang
-        if ($peminjaman->barang) {
-            $peminjaman->barang->increment('jumlah_barang', $validated['jumlah_kembali']);
-        }
 
         return response()->json([
             'success' => true,
@@ -110,3 +103,4 @@ class PengembalianApiController extends Controller
         ]);
     }
 }
+
